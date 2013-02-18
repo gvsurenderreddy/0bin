@@ -16,7 +16,7 @@
         <p>The javascript code then redirects to this address, but it adds the
            encryption key in the URL hash (#).</p>
         <p>When somebody want to read the paste, he usually just click on a link
-          with this URL. If the hash containing the key is part of it, Obin's
+          with this URL. If the hash containing the key is part of it, 0bin's
           javascript will use it to decrypt the content sent by the server.</p>
         <p>The browser never sends the hash to the server, so it does not
            receives the key.</p>
