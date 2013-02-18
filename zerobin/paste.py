@@ -252,7 +252,7 @@ class Paste(object):
         if expiration < 60 * 60 * 24 * 10:
             return 'in %s days(s)' % int(expiration / (60 * 60 * 24))
 
-        return 'the %s' % self.expiration.strftime('%m/%d/%Y')
+        return 'the %s' % self.expiration.strftime('%d %b %Y at %H:%M:%S')
 
 
     def delete(self):

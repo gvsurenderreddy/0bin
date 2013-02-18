@@ -64,7 +64,8 @@ MENU = (
     ('Home', '/'), # internal link. First link will be highlited
     ('Download 0bin', 'https://github.com/sametmax/0bin'), # external link
     ('Faq', '/faq/'), # faq
-    ('Contact', 'mailto:your@email.com') # email
+    ('zertrin.org', 'https://zertrin.org'), # zertrin.org
+    ('Contact', 'mailto:zertrinATzertrinDOTorg') # email
 )
 
 # limit size of pasted text in bytes. Be carefull allowing too much size can

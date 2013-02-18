@@ -51,7 +51,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/"><span>ø</span>bin<em>.net</em></a>
+          <a class="brand" href="/"><span>ø</span>bin<em>.zertrin.org</em></a>
           <div class="nav-collapse">
             <ul class="nav">
 
@@ -139,9 +139,9 @@
 
       </br>
         <p class="greetings span12">
-            Based on an original idea from
-           <a href="http://sebsauvage.net/paste/">sebsauvage.net</a><br>
-           <a href="http://sametmax.com">Sam &amp; Max</a>
+            Created by <a href="http://sametmax.com">Sam &amp; Max</a><br>
+            Based on an original idea from <a href="http://sebsauvage.net/paste/">sebsauvage.net</a><br>
+            <a href="https://zertrin.org/">Zertrin</a>
        </p>
       </footer>
 
