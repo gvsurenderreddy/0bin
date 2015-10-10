@@ -8,7 +8,7 @@
 
 0bin allows anybody to host a pastebin while welcoming any type of content to
 be pasted in it. The idea is that one can (probably...) not be legally entitled
-to `moderate the pastebin content`_ as he/she has no way to decrypt it.
+to `moderate the pastebin content`_ as they have no way to decrypt it.
 
 It's an Python implementation of the
 `zerobin project`_ under the `WTF licence`_. It's easy to
@@ -21,6 +21,8 @@ but in short::
 
     pip install zerobin
     zerobin
+
+0bin runs on Python 2.7 and Python 3.4.
 
 How it works
 =============
@@ -57,7 +59,8 @@ Other features
 - copy paste to clipboard in a click;
 - get paste short URL in a click;
 - own previous pastes history;
-- visual hash of a paste to easily tell it appart from others in a list.
+- visual hash of a paste to easily tell it apart from others in a list;
+- optional command-line tool to encrypt and paste data from shell or scripts.
 
 Technologies used
 ==================
@@ -69,6 +72,7 @@ Technologies used
 - Bootstrap_, the Twitter HTML5/CSS3 framework
 - VizHash.js_ to create visual hashes from pastes
 - Cherrypy_ (server only)
+- `node.js`_ (for optional command-line tool only)
 
 
 Known issues
@@ -95,6 +99,23 @@ What does 0bin not implement?
 .. _jQuery: http://jquery.com/
 .. _Bootstrap: http://twitter.github.com/bootstrap/
 .. _VizHash.js: https://github.com/sametmax/VizHash.js
-.. _Cherrypy: http://www.cherrypy.org/ (server only)
+.. _Cherrypy: http://www.cherrypy.org/
+.. _node.js: http://nodejs.org/
 .. _is not worth it: http://stackoverflow.com/questions/201705/how-many-random-elements-before-md5-produces-collisions
 .. _WTF licence: http://en.wikipedia.org/wiki/WTFPL
+
+Contributing
+=============
+
+Please fork the project, clone your repository and add the original repo as an upstream remote to keep yours in sync.
+
+For small fixes (typo and such), you can work on master.
+
+For features, you should create a dedicated branch.
+
+In any case, if you modify Javascript or CSS files, you shall run compress.sh afterward to provide the minified files. It requires your to have yui-compressor installed (apt-get install yui-compressor on the debian family).
+
+We don't require you to rebase/merge, ordinary merging is alright.
+
+Once it's ready, just request a PR.
+
