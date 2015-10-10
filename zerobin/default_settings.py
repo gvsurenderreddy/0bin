@@ -1,12 +1,13 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# vim: ai ts=4 sts=4 et sw=4
+# coding: utf-8
+
+from __future__ import unicode_literals, absolute_import
 
 
 ######## NOT SETTINGS, JUST BOILER PLATE ##############
 import os
 
-VERSION = '0.1.2'
+VERSION = '0.5'
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 LIBS_DIR = os.path.join(os.path.dirname(ROOT_DIR), 'libs')
 
@@ -68,6 +69,11 @@ MENU = (
     ('Contact', 'mailto:zertrinATzertrinDOTorg') # email
 )
 
-# limit size of pasted text in bytes. Be carefull allowing too much size can
+# limit size of pasted text in bytes. Be careful allowing too much size can
 # slow down user's browser
 MAX_SIZE = 1024 * 500
+
+# length of base64-like paste-id string in the url, int from 4 to 27 (length of sha1 digest)
+# total number of unique pastes can be calculated as 2^(6*PASTE_ID_LENGTH)
+# for PASTE_ID_LENGTH=8, for example, it's 2^(6*8) = 281 474 976 710 656
+PASTE_ID_LENGTH = 8

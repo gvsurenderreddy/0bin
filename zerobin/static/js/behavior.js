@@ -152,10 +152,13 @@
       }, 250); /* End of "decrypt" */
     },
 
-    /** Create a random base64 string long enought to be suitable as
-  an encryption key */
-    makeKey: function () {
-      return sjcl.codec.base64.fromBits(sjcl.random.randomWords(8, 0), 0);
+    /** Create a random base64-like string long enought to be suitable as
+        an encryption key */
+    makeKey: function (entropy) {
+        entropy = Math.ceil(entropy / 6) * 6; /* non-6-multiple produces same-length base64 */
+        var key = sjcl.bitArray.clamp(
+          sjcl.random.randomWords(Math.ceil(entropy / 32), 0), entropy );
+        return sjcl.codec.base64.fromBits(key, 0).replace(/\=+$/, '').replace(/\//, '-');
     },
 
     getFormatedDate: function (date) {
@@ -458,7 +461,7 @@
               image.height = imageHeight;
               var ctx = canvas.getContext("2d");
               ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
-              
+
               var paste = canvas.toDataURL(current_file.type);
               $('#content').val(paste).trigger('change');
               $('#content').hide();
@@ -511,7 +514,7 @@
         try {
 
           var expiration = $('#expiration').val();
-          var key = zerobin.makeKey();
+          var key = zerobin.makeKey(256);
 
           zerobin.encrypt(key, paste,
 
@@ -597,7 +600,7 @@
             e.preventDefault();
             if (confirm("This picture is unique to your paste so you can identify" +
               " it quickly. \n\n Do you want to know more about this?")) {
-              window.open("http://is.gd/IJaMRG", "_blank");
+              window.open("https://github.com/sametmax/VizHash.js", "_blank");
             }
           }).prependTo('.lnk-option').append(vhash.canvas);
         }
@@ -887,11 +890,8 @@
     });
 
     /* Send the paste by email */
-    $('#email-link').click(function() {
-    	zerobin.getTinyURL(window.location.toString(), function(tinyurl) {
-    		document.location.href= 'mailto:friend@example.com?body=' + tinyurl;
-    	});
-    	return false;
+    $('#email-link').click(function(e) {
+        e.target.href = 'mailto:friend@example.com?body=' + window.location.toString();
     });
 
 

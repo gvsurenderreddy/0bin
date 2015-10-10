@@ -1,18 +1,32 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
+
+from __future__ import print_function, unicode_literals, absolute_import
 
 import time
 import os
 import glob
 import tempfile
 import sys
+import codecs
+import unicodedata
+from functools import partial
 
-import default_settings
+from zerobin import default_settings
 sys.path.append(default_settings.LIBS_DIR)
 
 try:
-    from privilege import drop_privileges_permanently, coerce_user, coerce_group
+    from zerobin.privilege import drop_privileges_permanently, coerce_user, coerce_group
 except (AttributeError):
-    pass # privilege does't work on several plateform
+    pass  # privilege does't work on several plateform
+
+try:
+    from runpy import run_path
+except ImportError:
+    # python-2.6 or earlier - use simplier less-optimized execfile()
+    def run_path(file_path):
+        mod_globals = {'__file__': file_path}
+        execfile(file_path, mod_globals)
+        return mod_globals
 
 
 def drop_privileges(user=None, group=None, wait=5):
@@ -36,7 +50,7 @@ def drop_privileges(user=None, group=None, wait=5):
 
             drop_privileges_permanently(user, group, ())
         except Exception:
-            print "Failed to drop privileges. Running with current user."
+            print("Failed to drop privileges. Running with current user.")
 
 
 def dmerge(*args):
@@ -44,13 +58,14 @@ def dmerge(*args):
         Return new directionay being the sum of all merged dictionaries passed
         as arguments
     """
-
     dictionary = {}
-
     for arg in args:
         dictionary.update(arg)
-
     return dictionary
+
+
+class SettingsValidationError(Exception):
+    pass
 
 
 class SettingsContainer(object):
@@ -69,15 +84,23 @@ class SettingsContainer(object):
         return cls._instance
 
 
-    def update_with_module(self, module):
+    def update_with_dict(self, dict):
         """
-            Update settings with values from the given module.
+            Update settings with values from the given mapping object.
             (Taking only variable with uppercased name)
         """
-        for name, value in module.__dict__.iteritems():
+        for name, value in dict.items():
             if name.isupper():
                 setattr(self, name, value)
         return self
+
+
+    def update_with_module(self, module):
+        """
+            Update settings with values from the given module.
+            Uses update_with_dict() behind the scenes.
+        """
+        return self.update_with_dict(module.__dict__)
 
 
     @classmethod
@@ -94,11 +117,31 @@ class SettingsContainer(object):
     def update_with_file(self, filepath):
         """
             Update settings with values from the given module file.
-            User update_with_module() behind the scene
+            Uses update_with_dict() behind the scenes.
         """
-        sys.path.insert(0, os.path.dirname(filepath))
-        module_name = os.path.splitext(os.path.basename(filepath))[0]
-        return self.update_with_module(__import__(module_name))
+        settings = run_path(filepath)
+        return self.update_with_dict(settings)
 
 
 settings = SettingsContainer()
+
+
+def to_ascii(utext):
+    """ Take a unicode string and return ascii bytes.
+
+        Try to replace non ASCII char by similar ASCII char. If it can't,
+        replace it with "?".
+    """
+    return unicodedata.normalize('NFKD', utext).encode('ascii', "replace")
+
+
+# Make sure to always specify encoding when using open in Python 2 or 3
+safe_open = partial(codecs.open, encoding="utf8")
+
+
+def as_unicode(obj):
+    """ Return the unicode representation of an object """
+    try:
+        return unicode(obj)
+    except NameError:
+        return str(obj)
